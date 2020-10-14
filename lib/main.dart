@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'quizbrain.dart';
+
+QuizBrain quizBrain = QuizBrain();
+
 void main() => runApp(Quizzler());
 
 class Quizzler extends StatelessWidget {
@@ -25,6 +29,41 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  List<Icon> scoreKeeper = [];
+
+  void userSelection(bool selected) {
+    bool correctAnswer = quizBrain.authorityAnswer();
+    if (correctAnswer == selected) {
+      scoreKeeper.add(Icon(Icons.done, color: Colors.green));
+      quizBrain.next();
+    } else {
+      scoreKeeper.add(Icon(
+        Icons.close,
+        color: Colors.red,
+      ));
+      quizBrain.next();
+    }
+    setState(() {});
+  }
+//  List<String> questions = [
+//    'You can lead a cow down stairs but not up stairs.',
+//    'Approximately one quarter of human bones are in the feet.',
+//    'A slug\'s blood is green.',
+//  ];
+//
+
+//  List<bool> mark = [
+//    false,
+//    true,
+//    true,
+//  ];
+//
+//  Questions q1 = Questions(
+//      q: 'You can lead a cow down stairs but not up stairs.', a: false);
+//  Questions q2 = Questions(
+//      q: 'Approximately one quarter of human bones are in the feet.', a: true);
+//  Questions q3 = Questions(q: 'A slug\'s blood is green.', a: false);
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -37,7 +76,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-                'This is where the question text will go.',
+                quizBrain.authority(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -62,6 +101,7 @@ class _QuizPageState extends State<QuizPage> {
               ),
               onPressed: () {
                 //The user picked true.
+                userSelection(true);
               },
             ),
           ),
@@ -75,19 +115,30 @@ class _QuizPageState extends State<QuizPage> {
                 'False',
                 style: TextStyle(
                   fontSize: 20.0,
-                  color: Colors.white,
+                  color: Colors.yellow,
                 ),
               ),
               onPressed: () {
                 //The user picked false.
+                userSelection(false);
               },
             ),
           ),
         ),
         //TODO: Add a Row here as your score keeper
+        Row(
+          children: scoreKeeper,
+        )
       ],
     );
   }
+
+//  void response() {
+//    int q = questionNumber + 1;
+//    setState(() {
+//      q;
+//    });
+//  }
 }
 
 /*
